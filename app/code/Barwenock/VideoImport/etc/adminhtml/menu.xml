@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Barwenock_VideoImport::system_video_import" title="Import Video" sortOrder="30"
+             module="Barwenock_VideoImport" parent="Magento_Backend::system_convert"
+             action="video/import/videoImport" resource="Barwenock_VideoImport::videoimport"/>
+    </menu>
+</config>

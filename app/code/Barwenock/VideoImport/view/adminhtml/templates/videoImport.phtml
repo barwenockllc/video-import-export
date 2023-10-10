@@ -1,0 +1,11 @@
+<?php
+/**
+ * @var $block \Barwenock\VideoImport\Block\Adminhtml\Upload
+ */
+?>
+<form id="import-form" class="admin__fieldset" action="<?php echo $block->getFormAction(); ?>" method="post" enctype="multipart/form-data">
+    <input name="form_key" type="hidden" value="<?php echo $block->getFormKey();?>">
+    <label for="file_upload">Choose a file:</label>
+    <input type="file" name="file_upload" id="file_upload" />
+    <button type="submit" name="submit" value="submit">Upload File & Import</button>
+</form>
