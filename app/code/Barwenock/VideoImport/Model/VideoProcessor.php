@@ -58,6 +58,8 @@ class VideoProcessor
                 fclose($handle);
 
                 return true;
+            } else {
+                return false;
             }
         } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage());

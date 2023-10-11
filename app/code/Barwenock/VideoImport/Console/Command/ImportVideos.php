@@ -63,8 +63,10 @@ class ImportVideos extends \Symfony\Component\Console\Command\Command
             fclose($handle);
 
             $output->writeln("<info>Finished processing CSV file.</info>");
+            return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         } else {
             $output->writeln("<error>Cannot open file</error>");
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
     }
 }

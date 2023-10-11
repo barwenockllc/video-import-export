@@ -45,7 +45,7 @@ class ApiVideoImporter
     /**
      * @param $videoUrl
      * @param $sku
-     * @return void
+     * @return true
      * @throws \Exception
      */
     public function updateProductWithExternalVideo($videoUrl, $sku)
@@ -156,7 +156,7 @@ class ApiVideoImporter
      */
     protected function getProductData($baseUrl, $sku, $token)
     {
-        $serviceUrl = $baseUrl . "/rest/V1/products/" . $sku;
+        $serviceUrl = $baseUrl . "rest/V1/products/" . $sku;
 
         $this->curl->addHeader("Content-Type", "application/json");
         $this->curl->addHeader("Authorization", "Bearer " . $token);
