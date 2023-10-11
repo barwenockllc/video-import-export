@@ -4,10 +4,15 @@
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="barwenock_videoimport_import_videos" xsi:type="object">
-                    Barwenock\VideoImport\Console\Command\ImportVideos
-                </item>
+                <item name="barwenock_videoimport_import_videos"
+                      xsi:type="object">\Barwenock\VideoImport\Console\Command\ImportVideos</item>
             </argument>
+        </arguments>
+    </type>
+
+    <type name="\Barwenock\VideoImport\Model\VideoImportList">
+        <arguments>
+            <argument name="videoimportcsv" xsi:type="object">\Barwenock\VideoImport\Model\VideoProcessor</argument>
         </arguments>
     </type>
 </config>
