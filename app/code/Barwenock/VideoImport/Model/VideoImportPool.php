@@ -2,49 +2,26 @@
 
 namespace Barwenock\VideoImport\Model;
 
-class VideoImportPool
+class VideoImportPool implements \Barwenock\VideoImport\Api\VideoImportInterface
 {
     /**
-     * @var array
+     * @var \Barwenock\VideoImport\Model\VideoImportList
      */
-    protected $pool = [];
+    protected $videoImportList;
 
     /**
-     * @var array
+     * @param \Barwenock\VideoImport\Model\VideoImportList $videoImportList
      */
-    protected $constructorArgs = [];
-
-    /**
-     * @param ...$constructorArgs
-     * @return VideoProcessor|mixed|null
-     */
-    public function getObject(...$constructorArgs)
+    public function __construct(\Barwenock\VideoImport\Model\VideoImportList $videoImportList)
     {
-        if (empty($this->pool)) {
-            return $this->createObject(...$constructorArgs);
+        $this->videoImportList = $videoImportList;
+    }
+
+    public function addVideoImport(/*$severity, $title, $description, $url = '', $isInternal = true*/)
+    {
+        foreach ($this->videoImportList->asArray() as $videoImport) {
+//            $videoImport->addVideoImport($severity, $title, $description, $url, $isInternal);
         }
-        $object = array_pop($this->pool);
-        $this->constructorArgs[$object] = $constructorArgs;
-        return $object;
-    }
-
-    /**
-     * @param $object
-     * @return void
-     */
-    public function releaseObject($object)
-    {
-        $this->pool[] = $object;
-        unset($this->constructorArgs[$object]);
-    }
-
-    /**
-     * @param ...$constructorArgs
-     * @return VideoProcessor
-     */
-    protected function createObject(...$constructorArgs)
-    {
-        // Create a new object with constructor arguments here
-        return new \Barwenock\VideoImport\Model\VideoProcessor(...$constructorArgs);
+        return $this;
     }
 }
