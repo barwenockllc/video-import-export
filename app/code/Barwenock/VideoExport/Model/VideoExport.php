@@ -5,6 +5,31 @@ namespace Barwenock\VideoExport\Model;
 class VideoExport
 {
     /**
+     * @var \Magento\Framework\File\Csv
+     */
+    protected $csv;
+
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
+    protected $productRepository;
+
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
+    protected $searchCriteriaBuilder;
+
+    /**
+     * @var \Barwenock\VideoExport\Helper\FilesystemHelper
+     */
+    protected $filesystemHelper;
+
+    /**
+     * @var \Magento\Framework\App\Filesystem\DirectoryList
+     */
+    protected $directoryList;
+
+    /**
      * @param \Magento\Framework\File\Csv $csv
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
@@ -25,6 +50,10 @@ class VideoExport
         $this->directoryList = $directoryList;
     }
 
+    /**
+     * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
     public function exportVideoData()
     {
         $data = [['Product ID', 'Video URL']];
@@ -56,10 +85,11 @@ class VideoExport
 
                 // Check media type
                 if (isset($imageData['media_type']) && $imageData['media_type'] == 'external-video') {
-                    return $data[] = [$product->getSku(), $imageData['video_url']];
+                    $data[] = [$product->getSku(), $imageData['video_url']];
                 }
             }
         }
+        return $data;
     }
 
     /**

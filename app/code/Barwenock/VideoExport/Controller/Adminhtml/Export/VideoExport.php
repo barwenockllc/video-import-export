@@ -5,6 +5,11 @@ namespace Barwenock\VideoExport\Controller\Adminhtml\Export;
 class VideoExport extends \Magento\Backend\App\Action
 {
     /**
+     * @var \Barwenock\VideoExport\Model\VideoExport
+     */
+    protected $videoExport;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Barwenock\VideoExport\Model\VideoExport $videoExport
      */

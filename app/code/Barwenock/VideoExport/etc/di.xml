@@ -5,8 +5,7 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="video_export"
-                      xsi:type="object">Barwenock\VideoExport\Console\Command\VideosExportCommand
-                </item>
+                      xsi:type="object">\Barwenock\VideoExport\Console\Command\VideosExportCommand</item>
             </argument>
         </arguments>
     </type>

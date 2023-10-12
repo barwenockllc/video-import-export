@@ -9,14 +9,23 @@ use Barwenock\VideoExport\Model\VideoExport;
 
 class VideosExportCommand extends Command
 {
+    /**
+     * @var VideoExport
+     */
     protected $videoExport;
 
+    /**
+     * @param VideoExport $videoExport
+     */
     public function __construct(VideoExport $videoExport)
     {
         $this->videoExport = $videoExport;
         parent::__construct();
     }
 
+    /**
+     * @return void
+     */
     protected function configure()
     {
         $this->setName('video:export');
@@ -24,6 +33,11 @@ class VideosExportCommand extends Command
         parent::configure();
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
