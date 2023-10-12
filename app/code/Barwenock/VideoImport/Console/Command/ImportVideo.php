@@ -40,8 +40,8 @@ class ImportVideo extends \Symfony\Component\Console\Command\Command
     }
 
     public function execute(
-        \Symfony\Component\Console\Input\InputInterface $input = null,
-        \Symfony\Component\Console\Output\OutputInterface $output = null
+        \Symfony\Component\Console\Input\InputInterface $input,
+        \Symfony\Component\Console\Output\OutputInterface $output
     ) {
         $csvFile = $this->directoryList->getPath('media') . '/import/video/video.csv';
         if (!file_exists($csvFile)) {
