@@ -5,14 +5,17 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="barwenock_videoimport_import_videos"
-                      xsi:type="object">\Barwenock\VideoImport\Console\Command\ImportVideos</item>
+                      xsi:type="object">\Barwenock\VideoImport\Console\Command\ImportVideo
+                </item>
             </argument>
         </arguments>
     </type>
 
     <type name="\Barwenock\VideoImport\Model\VideoImportList">
         <arguments>
-            <argument name="videoimportcsv" xsi:type="object">\Barwenock\VideoImport\Model\VideoProcessor</argument>
+            <argument name="providers" xsi:type="array">
+                <item name="youtube" xsi:type="object">\Barwenock\VideoImport\Service\ApiVideoImporter</item>
+            </argument>
         </arguments>
     </type>
 </config>

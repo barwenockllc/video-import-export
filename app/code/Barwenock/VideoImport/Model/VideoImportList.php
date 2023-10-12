@@ -5,59 +5,28 @@ namespace Barwenock\VideoImport\Model;
 class VideoImportList
 {
     /**
-     * Object manager
-     *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var array
      */
-    protected $objectManager;
+    protected $providers = [];
 
     /**
-     * List of videoImports
-     *
-     * @var \Barwenock\VideoImport\Api\VideoImportInterface[]|string[]
+     * @param array $providers
      */
-    protected $videoImports;
-
-    /**
-     * @var bool
-     */
-    protected $isVideoImportVerified;
-
-    /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Barwenock\VideoImport\Api\VideoImportInterface[]|string[] $notifiers
-     */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $videoImports = [])
+    public function __construct(array $providers)
     {
-        $this->objectManager = $objectManager;
-        $this->videoImports = $videoImports;
-        $this->isVideoImportVerified = false;
+        $this->providers = $providers;
     }
 
     /**
-     * Returning list of video imports.
-     *
-     * @return \Barwenock\VideoImport\Api\VideoImportInterface[]
-     * @throws \InvalidArgumentException
+     * @param $providerCode
+     * @return mixed
      */
-    public function asArray()
+    public function getVideoProvider($providerCode)
     {
-        if (!$this->isVideoImportVerified) {
-            $hasErrors = false;
-            foreach ($this->videoImports as $classIndex => $class) {
-                $notifier = $this->objectManager->get($class);
-                if ($notifier instanceof \Barwenock\VideoImport\Api\VideoImportInterface) {
-                    $this->videoImports[$classIndex] = $notifier;
-                } else {
-                    $hasErrors = true;
-                    unset($this->videoImports[$classIndex]);
-                }
-            }
-            $this->isVideoImportVerified = true;
-            if ($hasErrors) {
-                throw new \InvalidArgumentException('All notifiers should implement VideoImportInterface');
-            }
+        if (isset($this->providers[$providerCode])) {
+            return $this->providers[$providerCode];
+        } else {
+            throw new \InvalidArgumentException("Provider '$providerCode' not implemented in pool.");
         }
-        return $this->videoImports;
     }
 }

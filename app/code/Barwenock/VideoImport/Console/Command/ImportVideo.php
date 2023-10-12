@@ -2,24 +2,32 @@
 
 namespace Barwenock\VideoImport\Console\Command;
 
-class ImportVideos extends \Symfony\Component\Console\Command\Command
+use Barwenock\VideoImport\Model\VideoImportList;
+use Magento\Framework\Filesystem\DirectoryList;
+
+class ImportVideo extends \Symfony\Component\Console\Command\Command
 {
     /**
      * @var \Magento\Framework\Filesystem\DirectoryList
      */
-    private $directoryList;
+    private DirectoryList $directoryList;
 
     /**
-     * @param \Barwenock\VideoImport\Model\VideoProcessor $videoProcessor
-     * @param \Magento\Framework\Filesystem\DirectoryList $directoryList
-     * @param $name
+     * @var VideoImportList
+     */
+    private \Barwenock\VideoImport\Model\VideoImportList $videoImportList;
+
+    /**
+     * @param VideoImportList $videoImportList
+     * @param DirectoryList $directoryList
+     * @param null $name
      */
     public function __construct(
-        \Barwenock\VideoImport\Service\ApiVideoImporter $apiVideoImporter,
+        \Barwenock\VideoImport\Model\VideoImportList $videoImportList,
         \Magento\Framework\Filesystem\DirectoryList $directoryList,
         $name = null
     ) {
-        $this->apiVideoImporter = $apiVideoImporter;
+        $this->videoImportList = $videoImportList;
         $this->directoryList = $directoryList;
         parent::__construct($name);
     }
@@ -32,13 +40,13 @@ class ImportVideos extends \Symfony\Component\Console\Command\Command
     }
 
     public function execute(
-        \Symfony\Component\Console\Input\InputInterface $input,
-        \Symfony\Component\Console\Output\OutputInterface $output
+        \Symfony\Component\Console\Input\InputInterface $input = null,
+        \Symfony\Component\Console\Output\OutputInterface $output = null
     ) {
         $csvFile = $this->directoryList->getPath('media') . '/import/video/video.csv';
         if (!file_exists($csvFile)) {
             $output->writeln("<error>File not found</error>");
-            return;
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
         if (($handle = fopen($csvFile, "r")) !== false) {
@@ -54,7 +62,17 @@ class ImportVideos extends \Symfony\Component\Console\Command\Command
 
                 foreach ($videos as $video) {
                     // Here, we call your method for each video code
-                    $this->apiVideoImporter->updateProductWithExternalVideo(trim($video), $sku);
+                    if (str_contains(trim($video), 'youtube.com')
+                        && preg_match('/[?&]v=([a-zA-Z0-9_-]+)/', trim($video), $matches)) {
+                         $this->videoImportList->getVideoProvider('youtube')
+                            ->updateProductWithExternalVideo(trim($video), $sku);
+                    } elseif (str_contains(trim($video), 'vimeo.com')
+                        && preg_match('/vimeo\.com\/(\d+)/', trim($video), $matches)) {
+                      // Logic for vimeo video update
+                    } else {
+                        $output->writeln("<error>No available service for import found</error>");
+                        return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+                    }
                 }
 
                 $output->writeln("<info>Processed SKU: {$sku}</info>");

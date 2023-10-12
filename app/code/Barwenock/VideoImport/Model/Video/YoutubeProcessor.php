@@ -1,8 +1,8 @@
 <?php
 
-namespace Barwenock\VideoImport\Model;
+namespace Barwenock\VideoImport\Model\Video;
 
-class VideoProcessor
+class YoutubeProcessor
 {
     /**
      * @var \Barwenock\VideoImport\Service\ApiVideoImporter
@@ -50,6 +50,7 @@ class VideoProcessor
 
                     foreach ($videos as $video) {
                         // Here, we call your method for each video code
+
                         $this->apiVideoImporter->updateProductWithExternalVideo(trim($video), $sku);
                     }
 
