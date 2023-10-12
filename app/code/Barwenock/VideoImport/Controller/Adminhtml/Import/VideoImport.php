@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Barwenock\VideoImport\Controller\Adminhtml\Import;
 
 class VideoImport extends \Magento\Backend\App\Action

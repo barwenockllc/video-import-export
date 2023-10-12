@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Barwenock\VideoImport\Service;
 
@@ -76,6 +77,8 @@ class ApiVideoImporter
             $this->curl->addHeader("Content-Type", "application/json");
             $this->curl->addHeader("Authorization", "Bearer " . $accessToken);
             $this->curl->post($serviceUrl, $this->serializer->serialize($productData));
+
+            return true;
         } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage());
         }

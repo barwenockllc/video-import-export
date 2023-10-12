@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Barwenock\VideoImport\Block\Adminhtml;
 
 class Upload extends \Magento\Backend\Block\Template
