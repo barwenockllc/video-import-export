@@ -4,7 +4,7 @@
     <update handle="styles"/>
     <body>
         <referenceContainer name="content">
-            <block class="Barwenock\VideoImport\Block\Adminhtml\Upload" name="customfileupload.upload"
+            <block class="Barwenock\VideoImport\Block\Adminhtml\Upload" name="videoimport.upload"
                    template="Barwenock_VideoImport::videoImport.phtml"/>
         </referenceContainer>
     </body>

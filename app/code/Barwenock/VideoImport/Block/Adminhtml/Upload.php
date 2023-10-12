@@ -21,4 +21,9 @@ class Upload extends \Magento\Backend\Block\Template
     {
         return $this->getUrl('video/import/handleImportFile');
     }
+
+    public function getExportAction()
+    {
+        return $this->getUrl('video_export/export/videoExport');
+    }
 }

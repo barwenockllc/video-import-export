@@ -47,7 +47,7 @@ class HandleImportFile extends \Magento\Backend\App\Action
                 $uploader->setAllowRenameFiles(false);
                 $uploader->setFilesDispersion(false);
 
-//                $uploader->save($targetDir, $uploadedFile['name']);
+                $uploader->save($targetDir, $uploadedFile['name']);
 
                 $ifVideosImported = $this->videoProcessor->process();
                 if ($ifVideosImported) {
