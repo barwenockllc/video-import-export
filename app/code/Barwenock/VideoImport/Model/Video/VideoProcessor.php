@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Barwenock\VideoImport\Model\Video;
 
-class YoutubeProcessor
+class VideoProcessor
 {
     /**
-     * @var \Barwenock\VideoImport\Service\ApiVideoImporter
+     * @var \Barwenock\VideoImport\Service\ApiYoutubeImporter
      */
-    protected \Barwenock\VideoImport\Service\ApiVideoImporter $apiVideoImporter;
+    protected \Barwenock\VideoImport\Service\ApiYoutubeImporter $apiVideoImporter;
 
     /**
      * @var \Magento\Framework\Filesystem\DirectoryList
@@ -16,12 +16,12 @@ class YoutubeProcessor
     protected \Magento\Framework\Filesystem\DirectoryList $directoryList;
 
     /**
-     * @param \Barwenock\VideoImport\Service\ApiVideoImporter $apiVideoImporter
+     * @param \Barwenock\VideoImport\Service\ApiYoutubeImporter $apiVideoImporter
      * @param \Magento\Framework\Filesystem\DirectoryList $directoryList
      */
     public function __construct(
-        \Barwenock\VideoImport\Service\ApiVideoImporter $apiVideoImporter,
-        \Magento\Framework\Filesystem\DirectoryList $directoryList,
+        \Barwenock\VideoImport\Service\ApiYoutubeImporter $apiVideoImporter,
+        \Magento\Framework\Filesystem\DirectoryList       $directoryList,
     ) {
         $this->apiVideoImporter = $apiVideoImporter;
         $this->directoryList = $directoryList;

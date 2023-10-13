@@ -52,7 +52,7 @@ class ApiVideoImporter
     public function updateProductWithExternalVideo($videoUrl, $sku)
     {
         try {
-            $baseUrl =  'http://magento2.ddev.site/';
+            $baseUrl = $this->storeManager->getStore()->getBaseUrl();
             $accessToken = $this->scopeConfig->getValue(
                 'video_import/general/access_token',
                 \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE

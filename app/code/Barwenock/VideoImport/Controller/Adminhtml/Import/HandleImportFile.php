@@ -11,19 +11,19 @@ class HandleImportFile extends \Magento\Backend\App\Action
     protected \Magento\Framework\Filesystem $fileSystem;
 
     /**
-     * @var \Barwenock\VideoImport\Model\Video\YoutubeProcessor
+     * @var \Barwenock\VideoImport\Model\Video\VideoProcessor
      */
-    protected \Barwenock\VideoImport\Model\Video\YoutubeProcessor $videoProcessor;
+    protected \Barwenock\VideoImport\Model\Video\VideoProcessor $videoProcessor;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Barwenock\VideoImport\Model\Video\YoutubeProcessor $videoProcessor
+     * @param \Barwenock\VideoImport\Model\Video\VideoProcessor $videoProcessor
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Filesystem $filesystem,
-        \Barwenock\VideoImport\Model\Video\YoutubeProcessor $videoProcessor
+        \Barwenock\VideoImport\Model\Video\VideoProcessor $videoProcessor
     ) {
         parent::__construct($context);
         $this->fileSystem = $filesystem;
