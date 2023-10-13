@@ -3,8 +3,14 @@ declare(strict_types=1);
 
 namespace Barwenock\VideoImport\Service;
 
-class ApiVideoImporter
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\HTTP\Client\Curl;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Store\Model\StoreManagerInterface;
+
+class ApiProductUpdate
 {
+
     /**
      * @var \Magento\Framework\HTTP\Client\Curl
      */
@@ -26,33 +32,42 @@ class ApiVideoImporter
     protected \Magento\Store\Model\StoreManagerInterface $storeManager;
 
     /**
-     * @param \Magento\Framework\HTTP\Client\Curl $curl
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @var \Barwenock\VideoImport\Model\VideoImportList
+     */
+    protected \Barwenock\VideoImport\Model\VideoImportList $videoImportList;
+    /**
+     * @param Curl $curl
+     * @param SerializerInterface $serializer
+     * @param ScopeConfigInterface $scopeConfig
+     * @param StoreManagerInterface $storeManager
+     * @param ApiYoutubeImporter $apiYoutubeImporter
+     * @param ApiVimeoImporter $apiVimeoImporter
      */
     public function __construct(
         \Magento\Framework\HTTP\Client\Curl                $curl,
         \Magento\Framework\Serialize\SerializerInterface $serializer,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Barwenock\VideoImport\Model\VideoImportList $videoImportList,
     ) {
         $this->curl = $curl;
         $this->serializer = $serializer;
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
+        $this->videoImportList = $videoImportList;
     }
 
     /**
      * @param $videoUrl
      * @param $sku
+     * @param $serviceType
      * @return true
      * @throws \Exception
      */
     public function updateProductWithExternalVideo($videoUrl, $sku)
     {
         try {
-            $baseUrl = $this->storeManager->getStore()->getBaseUrl();
+            $baseUrl =  'http://magento2.ddev.site/';
             $accessToken = $this->scopeConfig->getValue(
                 'video_import/general/access_token',
                 \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE
@@ -60,10 +75,20 @@ class ApiVideoImporter
 
             $productData = $this->getProductData($baseUrl, $sku, $accessToken);
 
-            $videoInfo = $this->getVideoInfoFromYoutube($videoUrl);
+            if (str_contains(trim($videoUrl), 'youtube.com')
+                && preg_match('/[?&]v=([a-zA-Z0-9_-]+)/', trim($videoUrl), $matches)) {
+                $videoInfo = $this->videoImportList->getVideoProvider('youtube')
+                    ->getVideoInfo(trim($videoUrl));
+            } elseif (str_contains(trim($videoUrl), 'vimeo.com')
+                && preg_match('/vimeo\.com\/(\d+)/', trim($videoUrl), $matches)) {
+                $videoInfo = $this->videoImportList->getVideoProvider('vimeo')
+                    ->getVideoInfo(trim($videoUrl));
+            } else {
+                throw new \Exception('No video import service found');
+            }
 
             $serviceUrl = $baseUrl . "rest/V1/products";
-            $productData = [
+            $productUpdateData = [
                 "product" => [
                     "sku" => $sku,
                     "media_gallery_entries" => $this->prepareMediaGalleryEntries(
@@ -76,79 +101,12 @@ class ApiVideoImporter
 
             $this->curl->addHeader("Content-Type", "application/json");
             $this->curl->addHeader("Authorization", "Bearer " . $accessToken);
-            $this->curl->post($serviceUrl, $this->serializer->serialize($productData));
+            $this->curl->post($serviceUrl, $this->serializer->serialize($productUpdateData));
 
             return true;
         } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage());
         }
-    }
-
-    /**
-     * @param $videoUrl
-     * @return array
-     * @throws \Exception
-     */
-    protected function getVideoInfoFromYoutube($videoUrl = null)
-    {
-        try {
-            sleep(10) ; // 10 seconds delay to avoid youtube api quota limit
-
-            //  API key YouTube.
-            $apiKey = $this->scopeConfig->getValue(
-                'catalog/product_video/youtube_api_key',
-                \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE
-            );
-
-            $pattern = '/[?&]v=([a-zA-Z0-9_-]+)/';
-            // Use preg_match to find the video ID
-            if (preg_match($pattern, $videoUrl, $matches)) {
-                $videoId = $matches[1];
-            }
-
-            $ch = curl_init("https://www.googleapis.com/youtube/v3/videos?id=$videoId&key=$apiKey&part=snippet");
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $result = curl_exec($ch);
-            curl_close($ch);
-
-            $data = json_decode($result, true);
-
-            if (!isset($data['items'][0])) {
-                throw new \Exception('No video information found.');
-            }
-
-            $videoInfo = $data['items'][0]['snippet'];
-
-            return [
-                'title' => $videoInfo['title'],
-                'description' => $videoInfo['description'],
-                'thumbnail_url' => $videoInfo['thumbnails']['default']['url'],
-                'thumbnail_path' => $this
-                    ->getThumbnailPath($data['items'][0]["snippet"]["thumbnails"]["default"]["url"]),
-                'meta' => json_encode($videoInfo),
-            ];
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
-        }
-    }
-
-    /**
-     * @param $url
-     * @return string
-     * @throws \Exception
-     */
-    protected function getThumbnailPath($url)
-    {
-        $imageData = file_get_contents($url);
-
-        if ($imageData === false) {
-            throw new \Exception('Could not download image from URL: ' . $url);
-        }
-
-        // Конвертируем изображение в формат base64
-        $base64Image = base64_encode($imageData);
-
-        return $base64Image;
     }
 
     /**

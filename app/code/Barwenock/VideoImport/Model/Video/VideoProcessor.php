@@ -6,9 +6,9 @@ namespace Barwenock\VideoImport\Model\Video;
 class VideoProcessor
 {
     /**
-     * @var \Barwenock\VideoImport\Service\ApiYoutubeImporter
+     * @var \Barwenock\VideoImport\Service\ApiProductUpdate
      */
-    protected \Barwenock\VideoImport\Service\ApiYoutubeImporter $apiVideoImporter;
+    protected \Barwenock\VideoImport\Service\ApiProductUpdate $apiProductUpdate;
 
     /**
      * @var \Magento\Framework\Filesystem\DirectoryList
@@ -16,14 +16,14 @@ class VideoProcessor
     protected \Magento\Framework\Filesystem\DirectoryList $directoryList;
 
     /**
-     * @param \Barwenock\VideoImport\Service\ApiYoutubeImporter $apiVideoImporter
+     * @param \Barwenock\VideoImport\Service\ApiProductUpdate $apiProductUpdate
      * @param \Magento\Framework\Filesystem\DirectoryList $directoryList
      */
     public function __construct(
-        \Barwenock\VideoImport\Service\ApiYoutubeImporter $apiVideoImporter,
+        \Barwenock\VideoImport\Service\ApiProductUpdate $apiProductUpdate,
         \Magento\Framework\Filesystem\DirectoryList       $directoryList,
     ) {
-        $this->apiVideoImporter = $apiVideoImporter;
+        $this->apiProductUpdate = $apiProductUpdate;
         $this->directoryList = $directoryList;
     }
 
@@ -51,8 +51,7 @@ class VideoProcessor
 
                     foreach ($videos as $video) {
                         // Here, we call your method for each video code
-
-                        $this->apiVideoImporter->updateProductWithExternalVideo(trim($video), $sku);
+                        $this->apiProductUpdate->updateProductWithExternalVideo(trim($video), $sku);
                     }
 
                     $row++;

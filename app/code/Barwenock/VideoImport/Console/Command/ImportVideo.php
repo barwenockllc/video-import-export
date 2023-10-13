@@ -3,33 +3,30 @@ declare(strict_types=1);
 
 namespace Barwenock\VideoImport\Console\Command;
 
-use Barwenock\VideoImport\Model\VideoImportList;
-use Magento\Framework\Filesystem\DirectoryList;
-
 class ImportVideo extends \Symfony\Component\Console\Command\Command
 {
     /**
      * @var \Magento\Framework\Filesystem\DirectoryList
      */
-    private DirectoryList $directoryList;
+    protected \Magento\Framework\Filesystem\DirectoryList $directoryList;
 
     /**
-     * @var VideoImportList
+     * @var \Barwenock\VideoImport\Service\ApiProductUpdate
      */
-    private \Barwenock\VideoImport\Model\VideoImportList $videoImportList;
+    protected \Barwenock\VideoImport\Service\ApiProductUpdate $apiProductUpdate;
 
     /**
-     * @param VideoImportList $videoImportList
-     * @param DirectoryList $directoryList
+     * @param \Magento\Framework\Filesystem\DirectoryList $directoryList
+     * @param \Barwenock\VideoImport\Service\ApiProductUpdate $apiProductUpdate
      * @param null $name
      */
     public function __construct(
-        \Barwenock\VideoImport\Model\VideoImportList $videoImportList,
         \Magento\Framework\Filesystem\DirectoryList $directoryList,
+        \Barwenock\VideoImport\Service\ApiProductUpdate $apiProductUpdate,
         $name = null
     ) {
-        $this->videoImportList = $videoImportList;
         $this->directoryList = $directoryList;
+        $this->apiProductUpdate = $apiProductUpdate;
         parent::__construct($name);
     }
 
@@ -63,17 +60,7 @@ class ImportVideo extends \Symfony\Component\Console\Command\Command
 
                 foreach ($videos as $video) {
                     // Here, we call your method for each video code
-                    if (str_contains(trim($video), 'youtube.com')
-                        && preg_match('/[?&]v=([a-zA-Z0-9_-]+)/', trim($video), $matches)) {
-                         $this->videoImportList->getVideoProvider('youtube')
-                            ->updateProductWithExternalVideo(trim($video), $sku);
-                    } elseif (str_contains(trim($video), 'vimeo.com')
-                        && preg_match('/vimeo\.com\/(\d+)/', trim($video), $matches)) {
-                      // Logic for vimeo video update
-                    } else {
-                        $output->writeln("<error>No available service for import found</error>");
-                        return \Magento\Framework\Console\Cli::RETURN_FAILURE;
-                    }
+                    $this->apiProductUpdate->updateProductWithExternalVideo($video, $sku);
                 }
 
                 $output->writeln("<info>Processed SKU: {$sku}</info>");

@@ -14,7 +14,8 @@
     <type name="\Barwenock\VideoImport\Model\VideoImportList">
         <arguments>
             <argument name="providers" xsi:type="array">
-                <item name="youtube" xsi:type="object">\Barwenock\VideoImport\Service\ApiVideoImporter</item>
+                <item name="youtube" xsi:type="object">\Barwenock\VideoImport\Service\ApiYoutubeImporter</item>
+                <item name="vimeo" xsi:type="object">\Barwenock\VideoImport\Service\ApiVimeoImporter</item>
             </argument>
         </arguments>
     </type>
