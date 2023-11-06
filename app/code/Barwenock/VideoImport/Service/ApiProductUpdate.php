@@ -69,7 +69,7 @@ class ApiProductUpdate
         try {
             $baseUrl =  $this->storeManager->getStore()->getBaseUrl();
             $accessToken = $this->scopeConfig->getValue(
-                'video_import/general/access_token',
+                'videoimport/general/access_token',
                 \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE
             );
 
