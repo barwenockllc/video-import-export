@@ -33,7 +33,7 @@ class VideoImportList
         if (isset($this->providers[$providerCode])) {
             return $this->providers[$providerCode];
         } else {
-            throw new \InvalidArgumentException(sprintf('Provider \'%s\' not implemented in pool.', $providerCode));
+            throw new \InvalidArgumentException(sprintf("Provider '%s' not implemented in pool.", $providerCode));
         }
     }
 }
