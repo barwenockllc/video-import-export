@@ -39,7 +39,7 @@ class ApiVimeoImporter
                 $videoId = $matches[1];
             }
 
-            $ch = curl_init("https://vimeo.com/api/oembed.json?format=json&url=https://vimeo.com/$videoId");
+            $ch = curl_init(sprintf('https://vimeo.com/api/oembed.json?format=json&url=https://vimeo.com/%s', $videoId));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $result = curl_exec($ch);
             curl_close($ch);
@@ -59,7 +59,7 @@ class ApiVimeoImporter
                 'meta' => json_encode($videoInfo),
             ];
         } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
+            throw new \Exception($exception->getMessage(), $exception->getCode(), $exception);
         }
     }
 

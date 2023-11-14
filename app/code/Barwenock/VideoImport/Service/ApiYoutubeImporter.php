@@ -41,8 +41,6 @@ class ApiYoutubeImporter
     public function getVideoInfo($videoUrl = null)
     {
         try {
-            sleep(10) ; // 10 seconds delay to avoid youtube api quota limit
-
             //  API key YouTube.
             $apiKey = $this->scopeConfig->getValue(
                 'catalog/product_video/youtube_api_key',
@@ -55,7 +53,7 @@ class ApiYoutubeImporter
                 $videoId = $matches[1];
             }
 
-            $ch = curl_init("https://www.googleapis.com/youtube/v3/videos?id=$videoId&key=$apiKey&part=snippet");
+            $ch = curl_init(sprintf('https://www.googleapis.com/youtube/v3/videos?id=%s&key=%s&part=snippet', $videoId, $apiKey));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $result = curl_exec($ch);
             curl_close($ch);
@@ -77,7 +75,7 @@ class ApiYoutubeImporter
                 'meta' => json_encode($videoInfo),
             ];
         } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
+            throw new \Exception($exception->getMessage(), $exception->getCode(), $exception);
         }
     }
 

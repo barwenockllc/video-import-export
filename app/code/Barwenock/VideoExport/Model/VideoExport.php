@@ -63,7 +63,7 @@ class VideoExport
      */
     public function exportVideoData()
     {
-        $data = [['Product ID', 'Video URL']];
+        $data = [['Product SKU', 'Video URL']];
 
         $products = $this->productRepository->getList($this->searchCriteriaBuilder->create())->getItems();
 
@@ -96,6 +96,7 @@ class VideoExport
                 }
             }
         }
+
         return $data;
     }
 
@@ -103,7 +104,7 @@ class VideoExport
      * @return string
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    protected function getExportFilePath()
+    protected function getExportFilePath(): string
     {
         $mediaDirectory = $this->directoryList->getPath('media');
         return $mediaDirectory . '/export/video.csv';

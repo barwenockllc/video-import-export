@@ -38,8 +38,8 @@ class VideoExport extends \Magento\Backend\App\Action
         try {
             $this->videoExport->exportVideoData();
             $this->messageManager->addSuccessMessage('Export was successfully');
-        } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage('Error uploading file: ' . $e->getMessage());
+        } catch (\Exception $exception) {
+            $this->messageManager->addErrorMessage('Error uploading file: ' . $exception->getMessage());
         }
 
         return $resultRedirect->setPath('video/import/videoImport');

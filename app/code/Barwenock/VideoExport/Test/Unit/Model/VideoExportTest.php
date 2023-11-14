@@ -105,7 +105,7 @@ class VideoExportTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(2, $csvData); // Expecting header and one data row
 
         // Check header
-        $this->assertEquals(['Product ID', 'Video URL'], $csvData[0]);
+        $this->assertEquals(['Product SKU', 'Video URL'], $csvData[0]);
 
         // Check data row
         $this->assertEquals(['test_sku', 'https://example.com/video.mp4'], $csvData[1]);

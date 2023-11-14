@@ -53,7 +53,7 @@ class VideosExportCommand extends Command
             $output->writeln("<info>Video export complete.</info>");
             return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         } catch (\Exception $exception) {
-            $output->writeln("<error>{$exception->getMessage()}</error>");
+            $output->writeln(sprintf('<error>%s</error>', $exception->getMessage()));
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
     }

@@ -9,11 +9,6 @@ declare(strict_types=1);
 
 namespace Barwenock\VideoImport\Service;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\HTTP\Client\Curl;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Store\Model\StoreManagerInterface;
-
 class ApiProductUpdate
 {
 
@@ -41,13 +36,13 @@ class ApiProductUpdate
      * @var \Barwenock\VideoImport\Model\VideoImportList
      */
     protected \Barwenock\VideoImport\Model\VideoImportList $videoImportList;
+
     /**
-     * @param Curl $curl
-     * @param SerializerInterface $serializer
-     * @param ScopeConfigInterface $scopeConfig
-     * @param StoreManagerInterface $storeManager
-     * @param ApiYoutubeImporter $apiYoutubeImporter
-     * @param ApiVimeoImporter $apiVimeoImporter
+     * @param \Magento\Framework\HTTP\Client\Curl $curl
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Barwenock\VideoImport\Model\VideoImportList $videoImportList
      */
     public function __construct(
         \Magento\Framework\HTTP\Client\Curl                $curl,
@@ -66,7 +61,6 @@ class ApiProductUpdate
     /**
      * @param $videoUrl
      * @param $sku
-     * @param $serviceType
      * @return true
      * @throws \Exception
      */
@@ -82,11 +76,11 @@ class ApiProductUpdate
             $productData = $this->getProductData($baseUrl, $sku, $accessToken);
 
             if (str_contains(trim($videoUrl), 'youtube.com')
-                && preg_match('/[?&]v=([a-zA-Z0-9_-]+)/', trim($videoUrl), $matches)) {
+                && preg_match('#[?&]v=([a-zA-Z0-9_-]+)#', trim($videoUrl), $matches)) {
                 $videoInfo = $this->videoImportList->getVideoProvider('youtube')
                     ->getVideoInfo(trim($videoUrl));
             } elseif (str_contains(trim($videoUrl), 'vimeo.com')
-                && preg_match('/vimeo\.com\/(\d+)/', trim($videoUrl), $matches)) {
+                && preg_match('#vimeo\.com\/(\d+)#', trim($videoUrl), $matches)) {
                 $videoInfo = $this->videoImportList->getVideoProvider('vimeo')
                     ->getVideoInfo(trim($videoUrl));
             } else {
@@ -111,7 +105,7 @@ class ApiProductUpdate
 
             return true;
         } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
+            throw new \Exception($exception->getMessage(), $exception->getCode(), $exception);
         }
     }
 
@@ -128,9 +122,8 @@ class ApiProductUpdate
         $this->curl->addHeader("Content-Type", "application/json");
         $this->curl->addHeader("Authorization", "Bearer " . $token);
         $this->curl->get($serviceUrl);
-        $response = $this->serializer->unserialize($this->curl->getBody());
 
-        return $response;
+        return $this->serializer->unserialize($this->curl->getBody());
     }
 
     /**

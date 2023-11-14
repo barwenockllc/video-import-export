@@ -63,8 +63,8 @@ class HandleImportFile extends \Magento\Backend\App\Action
                 } else {
                     $this->messageManager->addErrorMessage('During video importing error happened');
                 }
-            } catch (\Exception $e) {
-                $this->messageManager->addErrorMessage('Error uploading file: ' . $e->getMessage());
+            } catch (\Exception $exception) {
+                $this->messageManager->addErrorMessage('Error uploading file: ' . $exception->getMessage());
             }
         } else {
             $this->messageManager->addErrorMessage('Please select a file to upload.');

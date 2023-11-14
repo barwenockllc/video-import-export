@@ -43,7 +43,7 @@ class ImportVideo extends \Symfony\Component\Console\Command\Command
         parent::configure();
     }
 
-    public function execute(
+    protected function execute(
         \Symfony\Component\Console\Input\InputInterface $input,
         \Symfony\Component\Console\Output\OutputInterface $output
     ) {
@@ -57,7 +57,7 @@ class ImportVideo extends \Symfony\Component\Console\Command\Command
             $row = 0;
             while (($data = fgetcsv($handle, 1000, ";")) !== false) {
                 if ($row == 0) {
-                    $row++;
+                    ++$row;
                     continue; // skip headers
                 }
 
@@ -69,9 +69,10 @@ class ImportVideo extends \Symfony\Component\Console\Command\Command
                     $this->apiProductUpdate->updateProductWithExternalVideo($video, $sku);
                 }
 
-                $output->writeln("<info>Processed SKU: {$sku}</info>");
-                $row++;
+                $output->writeln(sprintf('<info>Processed SKU: %s</info>', $sku));
+                ++$row;
             }
+
             fclose($handle);
 
             $output->writeln("<info>Finished processing CSV file.</info>");

@@ -48,7 +48,7 @@ class VideoProcessor
                 $row = 0;
                 while (($data = fgetcsv($handle, 1000, ";")) !== false) {
                     if ($row == 0) {
-                        $row++;
+                        ++$row;
                         continue; // skip headers
                     }
 
@@ -60,8 +60,9 @@ class VideoProcessor
                         $this->apiProductUpdate->updateProductWithExternalVideo(trim($video), $sku);
                     }
 
-                    $row++;
+                    ++$row;
                 }
+
                 fclose($handle);
 
                 return true;
@@ -69,7 +70,7 @@ class VideoProcessor
                 return false;
             }
         } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
+            throw new \Exception($exception->getMessage(), $exception->getCode(), $exception);
         }
     }
 }

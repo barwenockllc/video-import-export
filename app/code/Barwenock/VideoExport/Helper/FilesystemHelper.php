@@ -29,7 +29,7 @@ class FilesystemHelper
                 touch($filePath);
             }
         } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
+            throw new \Exception($exception->getMessage(), $exception->getCode(), $exception);
         }
     }
 }
