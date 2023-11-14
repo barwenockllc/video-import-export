@@ -53,7 +53,11 @@ class ApiYoutubeImporter
                 $videoId = $matches[1];
             }
 
-            $ch = curl_init(sprintf('https://www.googleapis.com/youtube/v3/videos?id=%s&key=%s&part=snippet', $videoId, $apiKey));
+            $ch = curl_init(sprintf(
+                'https://www.googleapis.com/youtube/v3/videos?id=%s&key=%s&part=snippet',
+                $videoId,
+                $apiKey
+            ));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $result = curl_exec($ch);
             curl_close($ch);
