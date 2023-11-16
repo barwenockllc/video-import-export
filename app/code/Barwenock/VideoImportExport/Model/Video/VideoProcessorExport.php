@@ -107,6 +107,6 @@ class VideoProcessorExport
     protected function getExportFilePath(): string
     {
         $mediaDirectory = $this->directoryList->getPath('media');
-        return $mediaDirectory . '/export/video.csv';
+        return $mediaDirectory . '/export/video/video.csv';
     }
 }
