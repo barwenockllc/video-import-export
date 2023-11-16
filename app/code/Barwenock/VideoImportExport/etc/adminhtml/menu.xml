@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Barwenock
+ * @copyright Copyright (c) Barwenock
+ * @package Video Import Export for Magento 2
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Barwenock_VideoImportExport::system_video_import_export" title="Import/Export Video" sortOrder="30"
+             module="Barwenock_VideoImportExport" parent="Magento_Backend::system_convert"
+             action="video/index/index" resource="Barwenock_VideoImportExport::videoimportexport"/>
+    </menu>
+</config>

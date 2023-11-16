@@ -1,0 +1,21 @@
+{
+  "name": "barwenock/module-video-import-export",
+  "version": "1.0.0",
+  "description": "N/A",
+  "type": "magento2-module",
+  "require": {
+      "magento/framework": "*",
+      "barwenock/base": "*"
+  },
+  "license": [
+    "Proprietary"
+  ],
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Barwenock\\VideoImportExport\\": ""
+    }
+  }
+}
