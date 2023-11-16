@@ -22,53 +22,35 @@ class VideoProcessor
     protected \Magento\Framework\Filesystem\DirectoryList $directoryList;
 
     /**
+     * @var \Barwenock\VideoImport\Model\File\Reader
+     */
+    protected \Barwenock\VideoImport\Model\File\Reader $fileReader;
+
+    /**
      * @param \Barwenock\VideoImport\Service\ApiProductUpdate $apiProductUpdate
      * @param \Magento\Framework\Filesystem\DirectoryList $directoryList
+     * @param \Barwenock\VideoImport\Model\File\Reader $fileReader
      */
     public function __construct(
         \Barwenock\VideoImport\Service\ApiProductUpdate $apiProductUpdate,
-        \Magento\Framework\Filesystem\DirectoryList       $directoryList,
+        \Magento\Framework\Filesystem\DirectoryList $directoryList,
+        \Barwenock\VideoImport\Model\File\Reader $fileReader
     ) {
         $this->apiProductUpdate = $apiProductUpdate;
         $this->directoryList = $directoryList;
+        $this->fileReader = $fileReader;
     }
 
     /**
-     * @param $isConsole
-     * @param $output
-     * @return bool
+     * @return int
      * @throws \Exception
      */
     public function process()
     {
         try {
-            $csvFile = $this->directoryList->getPath('media') . '/import/video/video.csv';
+            $csvFilePath = sprintf('%s/import/video/video.csv', $this->directoryList->getPath('media'));
 
-            if (($handle = fopen($csvFile, "r")) !== false) {
-                $row = 0;
-                while (($data = fgetcsv($handle, 1000, ";")) !== false) {
-                    if ($row == 0) {
-                        ++$row;
-                        continue; // skip headers
-                    }
-
-                    $sku = $data[0];
-                    $videos = explode(',', $data[1]);
-
-                    foreach ($videos as $video) {
-                        // Here, we call your method for each video code
-                        $this->apiProductUpdate->updateProductWithExternalVideo(trim($video), $sku);
-                    }
-
-                    ++$row;
-                }
-
-                fclose($handle);
-
-                return true;
-            } else {
-                return false;
-            }
+            return $this->fileReader->processFile($csvFilePath);
         } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage(), $exception->getCode(), $exception);
         }

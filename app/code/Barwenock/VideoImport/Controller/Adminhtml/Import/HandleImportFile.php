@@ -58,7 +58,7 @@ class HandleImportFile extends \Magento\Backend\App\Action
                 $uploader->save($targetDir, $uploadedFile['name']);
 
                 $ifVideosImported = $this->videoProcessor->process();
-                if ($ifVideosImported) {
+                if ($ifVideosImported === 0) {
                     $this->messageManager->addSuccessMessage('Import was successfully.');
                 } else {
                     $this->messageManager->addErrorMessage('During video importing error happened');
