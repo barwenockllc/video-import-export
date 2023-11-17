@@ -1,14 +1,14 @@
 {
   "name": "barwenock/module-video-import-export",
   "version": "1.0.0",
-  "description": "N/A",
+  "description": "Extension for importing and exporting product videos",
   "type": "magento2-module",
   "require": {
       "magento/framework": "*",
       "barwenock/base": "*"
   },
   "license": [
-    "Proprietary"
+      "OSL-3.0"
   ],
   "autoload": {
     "files": [
