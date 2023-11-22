@@ -30,6 +30,9 @@ class Index extends \Magento\Backend\Block\Template
         return $this->getUrl('video/import/handleImportFile');
     }
 
+    /**
+     * @return string
+     */
     public function getExportAction()
     {
         return $this->getUrl('video/export/videoExportFile');

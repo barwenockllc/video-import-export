@@ -7,12 +7,13 @@
 
 /**
  * @var $block \Barwenock\VideoImportExport\Block\Adminhtml\Index
+ * @var $escaper \Magento\Framework\Escaper
  */
 ?>
 <div class="import-video">
-    <form id="import-form" class="admin__fieldset" action="<?php echo $block->getFormAction(); ?>"
+    <form id="import-form" class="admin__fieldset" action="<?= $escaper->escapeUrl($block->getFormAction()); ?>"
           method="post" enctype="multipart/form-data">
-        <input name="form_key" type="hidden" value="<?php echo $block->getFormKey();?>">
+        <input name="form_key" type="hidden" value="<?= $escaper->escapeHtmlAttr($block->getFormKey());?>">
         <label for="file_upload">Choose a file:</label>
         <input type="file" name="file_upload" id="file_upload" />
         <button type="submit" name="submit" value="submit">Upload File & Import</button>
@@ -20,9 +21,9 @@
 </div>
 
 <div class="export-video">
-    <form id="export-form" class="admin__fieldset" action="<?php echo $block->getExportAction(); ?>"
+    <form id="export-form" class="admin__fieldset" action="<?= $escaper->escapeUrl($block->getExportAction()); ?>"
           method="post" enctype="multipart/form-data">
-        <input name="form_key" type="hidden" value="<?php echo $block->getFormKey();?>">
+        <input name="form_key" type="hidden" value="<?= $escaper->escapeHtmlAttr($block->getFormKey());?>">
         <button type="submit" name="submit" value="submit">Export Videos CSV</button>
     </form>
 </div>
