@@ -29,6 +29,8 @@ class VideoExportFile extends \Magento\Backend\App\Action
     }
 
     /**
+     * Controller for exporting file
+     *
      * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()

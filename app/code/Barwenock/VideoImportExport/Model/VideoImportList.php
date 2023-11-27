@@ -25,7 +25,9 @@ class VideoImportList
     }
 
     /**
-     * @param $providerCode
+     * Get video provider
+     *
+     * @param string $providerCode
      * @return mixed
      */
     public function getVideoProvider($providerCode)

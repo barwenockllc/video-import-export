@@ -12,14 +12,8 @@ namespace Barwenock\VideoImportExport\Controller\Adminhtml\Index;
 class Index extends \Magento\Backend\App\Action
 {
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     */
-    public function __construct(\Magento\Backend\App\Action\Context $context)
-    {
-        parent::__construct($context);
-    }
-
-    /**
+     * Returns a result page with a configured title.
+     *
      * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()

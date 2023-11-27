@@ -37,6 +37,8 @@ class HandleImportFile extends \Magento\Backend\App\Action
     }
 
     /**
+     * Controller for handling import file
+     *
      * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()

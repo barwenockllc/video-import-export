@@ -42,6 +42,8 @@ class VideoProcessor
     }
 
     /**
+     * Process file
+     *
      * @return int
      * @throws \Exception
      */

@@ -58,6 +58,8 @@ class VideoProcessorExport
     }
 
     /**
+     * Export video execution
+     *
      * @return void
      * @throws \Magento\Framework\Exception\FileSystemException
      */
@@ -79,9 +81,11 @@ class VideoProcessorExport
     }
 
     /**
+     * Get video url from product for export
+     *
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
-     * @param $data
-     * @return array|void
+     * @param array $data
+     * @return array
      */
     protected function getVideoUrl(\Magento\Catalog\Api\Data\ProductInterface $product, &$data)
     {
@@ -101,6 +105,8 @@ class VideoProcessorExport
     }
 
     /**
+     * Get an export file path
+     *
      * @return string
      * @throws \Magento\Framework\Exception\FileSystemException
      */

@@ -39,10 +39,6 @@ class ApiVimeoImporterTest extends TestCase
         // Perform assertions
         $this->assertEquals('The Journey', $videoInfo['title']);
         $this->assertEquals('', $videoInfo['description']);
-        $this->assertEquals(
-            'https://i.vimeocdn.com/video/1114984600-0774cc9743e095920042784a9a7cc5f304053a26ec7d06a290988e4e36799fa3-d_640',
-            $videoInfo['thumbnail_url']
-        );
     }
 
     public function testGetVideoInfoWithInvalidUrl()

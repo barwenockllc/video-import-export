@@ -27,6 +27,8 @@ class ImportVideo extends \Symfony\Component\Console\Command\Command
     protected \Barwenock\VideoImportExport\Model\File\Reader $fileReader;
 
     /**
+     * Construct
+     *
      * @param \Magento\Framework\Filesystem\DirectoryList $directoryList
      * @param \Barwenock\VideoImportExport\Service\ApiProductUpdate $apiProductUpdate
      * @param \Barwenock\VideoImportExport\Model\File\Reader $fileReader
@@ -44,6 +46,11 @@ class ImportVideo extends \Symfony\Component\Console\Command\Command
         parent::__construct($name);
     }
 
+    /**
+     * Configures the current command
+     *
+     * @return void
+     */
     protected function configure()
     {
         $this->setName('video:import');
@@ -51,6 +58,14 @@ class ImportVideo extends \Symfony\Component\Console\Command\Command
         parent::configure();
     }
 
+    /**
+     * Executes the current command
+     *
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @return int
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
     protected function execute(
         \Symfony\Component\Console\Input\InputInterface $input,
         \Symfony\Component\Console\Output\OutputInterface $output
