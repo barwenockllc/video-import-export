@@ -27,22 +27,30 @@ class ImportVideo extends \Symfony\Component\Console\Command\Command
     protected \Barwenock\VideoImportExport\Model\File\Reader $fileReader;
 
     /**
+     * @var \Magento\Framework\Filesystem\Driver\File
+     */
+    protected \Magento\Framework\Filesystem\Driver\File $file;
+
+    /**
      * Construct
      *
      * @param \Magento\Framework\Filesystem\DirectoryList $directoryList
      * @param \Barwenock\VideoImportExport\Service\ApiProductUpdate $apiProductUpdate
      * @param \Barwenock\VideoImportExport\Model\File\Reader $fileReader
-     * @param null $name
+     * @param \Magento\Framework\Filesystem\Driver\File $file
+     * @param string|null $name
      */
     public function __construct(
         \Magento\Framework\Filesystem\DirectoryList $directoryList,
         \Barwenock\VideoImportExport\Service\ApiProductUpdate $apiProductUpdate,
         \Barwenock\VideoImportExport\Model\File\Reader $fileReader,
-        $name = null
+        \Magento\Framework\Filesystem\Driver\File $file,
+        string $name = null
     ) {
         $this->directoryList = $directoryList;
         $this->apiProductUpdate = $apiProductUpdate;
         $this->fileReader = $fileReader;
+        $this->file = $file;
         parent::__construct($name);
     }
 
@@ -72,7 +80,7 @@ class ImportVideo extends \Symfony\Component\Console\Command\Command
     ) {
         $csvFilePath = sprintf('%s/import/video/video.csv', $this->directoryList->getPath('media'));
 
-        if (!file_exists($csvFilePath)) {
+        if (!$this->file->isExists($csvFilePath)) {
             $output->writeln('<error>File not found</error>');
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }

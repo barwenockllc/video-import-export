@@ -54,7 +54,11 @@ class VideoProcessor
 
             return $this->fileReader->processFile($csvFilePath);
         } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage(), $exception->getCode(), $exception);
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __($exception->getMessage()),
+                $exception->getCode(),
+                $exception
+            );
         }
     }
 }

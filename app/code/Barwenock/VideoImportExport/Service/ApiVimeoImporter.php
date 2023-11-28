@@ -14,71 +14,76 @@ class ApiVimeoImporter
     /**
      * @var \Magento\Framework\HTTP\Client\Curl
      */
-    protected \Magento\Framework\HTTP\Client\Curl $curl;
+    protected $curl;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Driver\File
+     */
+    protected $fileDriver;
 
     /**
      * @param \Magento\Framework\HTTP\Client\Curl $curl
+     * @param \Magento\Framework\Filesystem\Driver\File $fileDriver
      */
     public function __construct(
-        \Magento\Framework\HTTP\Client\Curl $curl
+        \Magento\Framework\HTTP\Client\Curl $curl,
+        \Magento\Framework\Filesystem\Driver\File $fileDriver
     ) {
         $this->curl = $curl;
+        $this->fileDriver = $fileDriver;
     }
 
     /**
-     * @param $videoUrl
+     * Get video info of Vimeo service
+     *
+     * @param string $videoUrl
      * @return array
-     * @throws \Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getVideoInfo($videoUrl = null)
     {
-        try {
-            $pattern = '/vimeo\.com\/(\d+)/';
-            // Use preg_match to find the video ID
-            if (preg_match($pattern, $videoUrl, $matches)) {
-                $videoId = $matches[1];
-            }
-
-            $ch = curl_init(sprintf(
-                'https://vimeo.com/api/oembed.json?format=json&url=https://vimeo.com/%s',
-                $videoId
-            ));
-
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $result = curl_exec($ch);
-            curl_close($ch);
-
-            $videoInfo = json_decode($result, true);
-
-            if (!isset($videoInfo['type'])) {
-                throw new \Exception('No video information found.');
-            }
-
-            return [
-                'title' => $videoInfo['title'],
-                'description' => $videoInfo['description'],
-                'thumbnail_url' => $videoInfo['thumbnail_url'],
-                'thumbnail_path' => $this
-                    ->getThumbnailPath($videoInfo['thumbnail_url']),
-                'meta' => json_encode($videoInfo),
-            ];
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage(), $exception->getCode(), $exception);
+        $pattern = '/vimeo\.com\/(\d+)/';
+        // Use preg_match to find the video ID
+        if (preg_match($pattern, $videoUrl, $matches)) {
+            $videoId = $matches[1];
         }
+
+        // Resetting header authorization from the previous request
+        $this->curl->addHeader('Authorization', null);
+
+        $this->curl->get(sprintf(
+            'https://vimeo.com/api/oembed.json?format=json&url=https://vimeo.com/%s',
+            $videoId
+        ));
+
+        $result = $this->curl->getBody();
+
+        $videoInfo = json_decode($result, true);
+
+        if (!isset($videoInfo['type'])) {
+            throw new \Magento\Framework\Exception\LocalizedException(__('No video information found.'));
+        }
+
+        return [
+            'title' => $videoInfo['title'],
+            'description' => $videoInfo['description'],
+            'thumbnail_url' => $videoInfo['thumbnail_url'],
+            'thumbnail_path' => $this
+                ->getThumbnailPath($videoInfo['thumbnail_url']),
+            'meta' => json_encode($videoInfo),
+        ];
     }
 
     /**
-     * @param $url
+     * Retrieves the base64-encoded thumbnail image data from a given URL
+     *
+     * @param string $url
      * @return string
-     * @throws \Exception
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     protected function getThumbnailPath($url)
     {
-        $imageData = file_get_contents($url);
-
-        if ($imageData === false) {
-            throw new \Exception('Could not download image from URL: ' . $url);
-        }
+        $imageData = $this->fileDriver->fileGetContents($url);
 
         return base64_encode($imageData);
     }
