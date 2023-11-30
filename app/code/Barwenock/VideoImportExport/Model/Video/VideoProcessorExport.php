@@ -110,7 +110,7 @@ class VideoProcessorExport
      * @return string
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    protected function getExportFilePath(): string
+    public function getExportFilePath(): string
     {
         $mediaDirectory = $this->directoryList->getPath('media');
         return $mediaDirectory . '/export/video/video.csv';
