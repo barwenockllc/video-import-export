@@ -56,8 +56,8 @@ class VideoProcessor
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __($exception->getMessage()),
-                $exception->getCode(),
-                $exception
+                $exception,
+                $exception->getCode()
             );
         }
     }
