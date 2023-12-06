@@ -1,50 +1,57 @@
 <?php
+/**
+ * @author Barwenock
+ * @copyright Copyright (c) Barwenock
+ * @package Video Import Export for Magento 2
+ */
+
+declare(strict_types=1);
 
 namespace Barwenock\VideoImportExport\Test\Unit\Model;
-
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 class VideoProcessorExportTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Barwenock\VideoImportExport\Model\Video\VideoProcessorExport
      */
-    private $videoExport;
+    protected $videoExport;
 
     /**
      * @var \Magento\Framework\File\Csv|\PHPUnit\Framework\MockObject\MockObject
      */
-    private $csv;
+    protected $csv;
 
     /**
-     * @var ProductRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
-    private $productRepositoryMock;
+    protected $productRepositoryMock;
 
     /**
-     * @var SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
-    private $searchCriteriaBuilderMock;
+    protected $searchCriteriaBuilderMock;
 
     /**
      * @var \Barwenock\VideoImportExport\Helper\FilesystemHelper
      */
-    private $filesystemHelper;
+    protected $filesystemHelper;
 
     /**
-     * @var DirectoryList|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit\Framework\MockObject\MockObject
      */
-    private $directoryListMock;
+    protected $directoryListMock;
 
     protected function setUp(): void
     {
-        $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
-        $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
-        $this->directoryListMock = $this->createMock(DirectoryList::class);
+        $this->productRepositoryMock = $this
+            ->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $this->searchCriteriaBuilderMock = $this
+            ->createMock(\Magento\Framework\Api\SearchCriteriaBuilder::class);
+        $this->directoryListMock = $this
+            ->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
         $this->csv = new \Magento\Framework\File\Csv(new \Magento\Framework\Filesystem\Driver\File);
-        $this->filesystemHelper = new \Barwenock\VideoImportExport\Helper\FilesystemHelper;
+        $this->filesystemHelper = $this
+            ->createMock(\Barwenock\VideoImportExport\Helper\FilesystemHelper::class);
 
         $this->videoExport = new \Barwenock\VideoImportExport\Model\Video\VideoProcessorExport(
             $this->csv,
@@ -97,7 +104,7 @@ class VideoProcessorExportTest extends \PHPUnit\Framework\TestCase
         $this->videoExport->exportVideoData();
 
         // Check if the CSV file is created in the expected location
-        $exportFilePath = $this->directoryListMock->getPath('media') . '/export/video.csv';
+        $exportFilePath = $this->directoryListMock->getPath('media') . '/export/video/video.csv';
         $this->assertTrue(file_exists($exportFilePath));
 
         // Read the CSV file and check if it contains the expected data

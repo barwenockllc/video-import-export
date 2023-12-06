@@ -9,26 +9,26 @@ declare(strict_types=1);
 
 namespace Barwenock\VideoImportExport\Test\Unit\Service;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\HTTP\Client\Curl;
-use Barwenock\VideoImportExport\Service\ApiVimeoImporter;
-
-class ApiVimeoImporterTest extends TestCase
+class ApiVimeoImporterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ApiVimeoImporter
+     * @var \Barwenock\VideoImportExport\Service\ApiVimeoImporter
      */
-    private $apiVimeoImporter;
+    protected $apiVimeoImporter;
 
     /**
-     * @var Curl|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\HTTP\Client\Curl|\PHPUnit\Framework\MockObject\MockObject
      */
-    private $curl;
+    protected $curl;
 
     protected function setUp(): void
     {
-        $this->curl = $this->createMock(Curl::class);
-        $this->apiVimeoImporter = new ApiVimeoImporter($this->curl);
+        $this->curl = new \Magento\Framework\HTTP\Client\Curl;
+        $this->fileDriver = new \Magento\Framework\Filesystem\Driver\File;
+        $this->apiVimeoImporter = new \Barwenock\VideoImportExport\Service\ApiVimeoImporter(
+            $this->curl,
+            $this->fileDriver
+        );
     }
 
     public function testGetVideoInfoWithValidUrl()
@@ -43,12 +43,11 @@ class ApiVimeoImporterTest extends TestCase
 
     public function testGetVideoInfoWithInvalidUrl()
     {
-        // Mock the HTTP request
-        $this->curl->expects($this->never())
-            ->method('get');
+        // Expect a LocalizedException with the specified error message
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('No video information found.');
 
         // Call the method under test with an invalid URL
-        $this->expectException(\Exception::class);
-        $this->apiVimeoImporter->getVideoInfo('invalid-url');
+        $this->apiVimeoImporter->getVideoInfo('https://vimeo.com/347373734737');
     }
 }
